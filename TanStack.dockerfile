@@ -1,16 +1,23 @@
 FROM node:lts AS builder
 WORKDIR /app
 
+RUN npm install -g pnpm
+
 COPY package*.json ./
-RUN npm install --legacy-peer-deps
+COPY pnpm-lock.yaml ./
+
+RUN pnpm install --legacy-peer-deps
 
 COPY . .
-RUN npm run build
+
+RUN pnpm run build
 
 FROM node:lts-slim AS runner
 WORKDIR /app
 
-RUN npm install -g serve
+RUN npm install -g pnpm
+
+RUN pnpm add -g serve
 
 COPY --from=builder /app/dist ./dist
 

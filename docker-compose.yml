@@ -5,7 +5,7 @@ services:
     build: 
       context: .
       dockerfile: TanStack.dockerfile
-    container_name: TanStack
+    container_name: TanStack_app
     ports:
       - "3000:3000"
     depends_on:
