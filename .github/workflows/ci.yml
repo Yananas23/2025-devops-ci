@@ -36,6 +36,12 @@ jobs:
       - name: Unit tests
         run: pnpm test
 
+      - name: e2e tests
+        run: pnpm test:e2e
+    
+      - name: e2e tests UI
+        run: pnpm test:e2e:ui
+
       - name: Format check (Prettier)
         run: pnpm exec prettier --check .
 
@@ -47,42 +53,3 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t my-app:latest .
-
-  e2e:
-    runs-on: ubuntu-latest
-    needs: ci
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        with:
-         path: ~/.local/share/pnpm/store
-         key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-         restore-keys: |
-          ${{ runner.os }}-pnpm-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-
-      - name: 🚀 Run E2E tests
-        env:
-         CI: true
-        run: |
-         echo "Running E2E tests from $(pwd)"
-         pnpm exec playwright test --config=playwright.config.ts || pnpm exec playwright test --config=e2e/playwright.config.ts
