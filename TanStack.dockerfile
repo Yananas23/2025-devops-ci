@@ -3,10 +3,9 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
-COPY package*.json ./
-COPY pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install --legacy-peer-deps
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
@@ -15,9 +14,7 @@ RUN pnpm run build
 FROM node:lts-slim AS runner
 WORKDIR /app
 
-RUN npm install -g pnpm
-
-RUN pnpm add -g serve
+RUN npm install -g serve
 
 COPY --from=builder /app/dist ./dist
 
