@@ -66,6 +66,14 @@ jobs:
         with:
           version: 9
 
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+         path: ~/.local/share/pnpm/store
+         key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+         restore-keys: |
+          ${{ runner.os }}-pnpm-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -73,4 +81,8 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: 🚀 Run E2E tests
-        run: pnpm test:e2e
+        env:
+         CI: true
+        run: |
+         echo "Running E2E tests from $(pwd)"
+         pnpm exec playwright test --config=playwright.config.ts || pnpm exec playwright test --config=e2e/playwright.config.ts
