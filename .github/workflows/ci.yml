@@ -31,15 +31,18 @@ jobs:
             ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
 
       - name: Unit tests
         run: pnpm test
 
-      - name: e2e tests
+      - name: E2E tests (headless)
         run: pnpm test:e2e
-    
-      - name: e2e tests UI
+
+      - name: E2E tests (UI)
         run: pnpm test:e2e:ui
 
       - name: Format check (Prettier)
