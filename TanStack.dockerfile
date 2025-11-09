@@ -1,7 +1,7 @@
 FROM node:lts AS builder
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@8
 
 COPY package.json pnpm-lock.yaml ./
 
