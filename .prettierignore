@@ -1,5 +1,6 @@
 # Dependencies
 node_modules
+package.json
 
 # Build outputs
 dist
@@ -24,3 +25,13 @@ coverage
 
 # Logs
 *.log
+
+# Ignorer les fichiers de configuration CI/CD
+.github/
+docker-compose.yml
+
+# Ignorer les docs
+README.md
+
+# Ignorer le fichiers de tests
+e2e/
